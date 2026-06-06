@@ -32,9 +32,10 @@ a { color: inherit; text-decoration: none; }
 
 
 /* ══════════════════════════════════════════════════════════════
-   THEME TOGGLE — dual-icon pill, sticky top-right
+   THEME TOGGLE — .sr-theme-pill (renamed from .theme-toggle to avoid
+   collision with app.js which owns .theme-toggle button)
    ══════════════════════════════════════════════════════════════ */
-.theme-toggle {
+.sr-theme-pill {
   position: fixed;
   top: var(--space-4);
   right: var(--space-4);
@@ -50,7 +51,7 @@ a { color: inherit; text-decoration: none; }
   transition: var(--transition-theme), border-color var(--dur-base);
 }
 
-.theme-toggle__btn {
+.sr-pill__btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -213,7 +214,7 @@ a { color: inherit; text-decoration: none; }
 
 .countdown__digit {
   font-family: var(--font-mono);
-  font-size: clamp(2rem, 10vw, var(--text-3xl));
+  font-size: clamp(1.3rem, 7vw, var(--text-3xl));
   font-weight: 700;
   line-height: 1;
   min-width: 2ch;
@@ -223,7 +224,7 @@ a { color: inherit; text-decoration: none; }
 
 .countdown__sep {
   font-family: var(--font-mono);
-  font-size: clamp(2rem, 10vw, var(--text-3xl));
+  font-size: clamp(1.3rem, 7vw, var(--text-3xl));
   font-weight: 400;
   line-height: 1;
   padding-top: 0.05em;
@@ -449,10 +450,23 @@ a { color: inherit; text-decoration: none; }
 }
 
 
+/* ── COUNTDOWN: tighter on very small phones ── */
+@media (max-width: 400px) {
+  .countdown {
+    gap: var(--space-1);
+  }
+  .countdown__digit {
+    padding: var(--space-2) var(--space-2);
+  }
+  .countdown__sep {
+    font-size: clamp(1.1rem, 6vw, 1.8rem);
+  }
+}
+
 /* ── RESPONSIVE ── */
 @media (min-width: 480px) {
-  .countdown__digit { font-size: clamp(2.5rem, 10vw, var(--text-4xl)); }
-  .countdown__sep   { font-size: clamp(2.5rem, 10vw, var(--text-4xl)); }
+  .countdown__digit { font-size: clamp(2rem, 9vw, var(--text-4xl)); }
+  .countdown__sep   { font-size: clamp(2rem, 9vw, var(--text-4xl)); }
   .contact-grid { gap: var(--space-4); }
 }
 

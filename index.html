@@ -34,13 +34,24 @@
 <body>
 
   <!-- ═══════════════════════════════════════════════
-       THEME TOGGLE — dual-icon pill
-       ☀  = light mode   |   eclipsed sun = dark mode
+       THEME TOGGLE
+       Hidden .theme-toggle button — app.js finds this, owns theme logic.
+       Visible .sr-theme-pill — our redesigned dual-icon pill.
        ═══════════════════════════════════════════════ -->
-  <div class="theme-toggle" role="group" aria-label="Cambiar tema">
+
+  <!-- app.js compatibility: it finds this button, attaches its own click handler,
+       and may set its innerHTML. Kept hidden so users never see it. -->
+  <button class="theme-toggle"
+          aria-hidden="true"
+          tabindex="-1"
+          style="position:absolute;width:0;height:0;overflow:hidden;opacity:0;pointer-events:none;"
+          aria-label="Cambiar tema">☀</button>
+
+  <!-- Visible dual-icon pill for users -->
+  <div class="sr-theme-pill" role="group" aria-label="Cambiar tema">
 
     <!-- Sun → activates light mode -->
-    <button class="theme-toggle__btn theme-toggle__btn--light"
+    <button class="sr-pill__btn sr-pill__btn--light"
             data-theme-btn="light"
             aria-pressed="false"
             title="Modo día">
@@ -58,7 +69,7 @@
     </button>
 
     <!-- Eclipsed sun → activates dark mode -->
-    <button class="theme-toggle__btn theme-toggle__btn--dark"
+    <button class="sr-pill__btn sr-pill__btn--dark"
             data-theme-btn="dark"
             aria-pressed="true"
             title="Modo noche">
@@ -82,7 +93,7 @@
       </svg>
     </button>
 
-  </div><!-- /.theme-toggle -->
+  </div><!-- /.sr-theme-pill -->
 
 
   <main class="page-wrapper">
@@ -646,14 +657,14 @@
   (function () {
     var root = document.documentElement;
 
-    /* Sync aria-pressed to match data-theme — CSS uses [aria-pressed="true"] for highlight */
+    /* Keep aria-pressed in sync for accessibility (visual highlight is pure CSS via [data-theme]) */
     function updateToggleState(theme) {
-      document.querySelectorAll('.theme-toggle__btn').forEach(function (btn) {
+      document.querySelectorAll('.sr-pill__btn').forEach(function (btn) {
         btn.setAttribute('aria-pressed', btn.dataset.themeBtn === theme ? 'true' : 'false');
       });
     }
 
-    /* Watch for ANY data-theme change — our JS OR app.js — and keep toggle in sync */
+    /* Watch for ANY data-theme change — our JS OR app.js — and keep aria-pressed in sync */
     var observer = new MutationObserver(function (mutations) {
       mutations.forEach(function (m) {
         if (m.attributeName === 'data-theme') updateToggleState(root.dataset.theme);
@@ -662,7 +673,16 @@
     observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
 
     function applyTheme(theme) {
-      root.dataset.theme = theme;  /* MutationObserver fires updateToggleState */
+      /* Delegate to the hidden .theme-toggle button if possible — lets app.js
+         handle its own localStorage + state logic. If not found, set directly. */
+      var hidden = document.querySelector('.theme-toggle');
+      var current = root.dataset.theme;
+      if (hidden && current !== theme) {
+        hidden.click();           /* app.js toggles dark↔light */
+      } else if (!hidden) {
+        root.dataset.theme = theme;   /* fallback: no app.js */
+      }
+      /* Always persist our own preference too */
       try { localStorage.setItem('eclipse-theme', theme); } catch(e) {}
     }
 
@@ -670,11 +690,13 @@
     var saved;
     try { saved = localStorage.getItem('eclipse-theme'); } catch(e) {}
     var initial = (saved === 'light' || saved === 'dark') ? saved : (root.dataset.theme || 'dark');
-    applyTheme(initial);
+    /* Don’t call applyTheme on load — app.js will set data-theme itself;
+       just make sure aria-pressed matches whatever data-theme is set to. */
+    updateToggleState(initial);
 
-    /* Click handler — works before app.js loads */
+    /* Click handler on our pill — works before app.js loads */
     document.addEventListener('click', function (e) {
-      var btn = e.target.closest('.theme-toggle__btn');
+      var btn = e.target.closest('.sr-pill__btn');
       if (btn && btn.dataset.themeBtn) applyTheme(btn.dataset.themeBtn);
     });
   })();

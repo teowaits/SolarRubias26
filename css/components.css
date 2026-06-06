@@ -8,32 +8,34 @@
 
 
 /* ══════════════════════════════════════════════════════════════
-   THEME TOGGLE — dual-icon pill
+   THEME TOGGLE — .sr-theme-pill
+   (renamed from .theme-toggle so app.js owns its hidden .theme-toggle button
+    without touching our visible pill)
    ══════════════════════════════════════════════════════════════ */
-.theme-toggle {
+.sr-theme-pill {
   box-shadow: var(--shadow-card);
 }
 
-.theme-toggle__btn {
+.sr-pill__btn {
   color: var(--text-secondary);
 }
 
-.theme-toggle__btn:hover {
+.sr-pill__btn:hover {
   color: var(--text-primary);
 }
 
 /*
   Active button: driven purely by [data-theme] on <html>.
-  Works whether app.js or our inline script sets the attribute — zero JS needed here.
+  app.js sets this attribute — our CSS picks it up automatically.
 */
-[data-theme="dark"]  .theme-toggle__btn--dark,
-[data-theme="light"] .theme-toggle__btn--light {
+[data-theme="dark"]  .sr-pill__btn--dark,
+[data-theme="light"] .sr-pill__btn--light {
   background: var(--accent-dim);
   color: var(--accent);
 }
 
-/* Icon SVGs inside the buttons inherit currentColor */
-.theme-toggle__btn svg {
+/* Icon SVGs inherit currentColor */
+.sr-pill__btn svg {
   display: block;
   flex-shrink: 0;
 }
