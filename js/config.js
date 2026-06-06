@@ -91,7 +91,7 @@ const CONFIG = {
 
   /* ─── MAP ────────────────────────────────────────────────── */
   map: {
-    defaultZoom:   8,
+    defaultZoom:   7,
     minZoom:       5,
     maxZoom:      14,
     centerLat:    42.3,
