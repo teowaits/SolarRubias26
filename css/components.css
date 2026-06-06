@@ -23,15 +23,14 @@
 }
 
 /*
-  Active button: driven by aria-pressed, which is kept in sync with [data-theme]
-  via MutationObserver in the inline script — works whether our JS or app.js changes the theme.
+  Active button: driven purely by [data-theme] on <html>.
+  Works whether app.js or our inline script sets the attribute — zero JS needed here.
 */
-.theme-toggle__btn[aria-pressed="true"] {
+[data-theme="dark"]  .theme-toggle__btn--dark,
+[data-theme="light"] .theme-toggle__btn--light {
   background: var(--accent-dim);
   color: var(--accent);
 }
-
-/* Remove the data-theme descendant rules — replaced by aria-pressed above */
 
 /* Icon SVGs inside the buttons inherit currentColor */
 .theme-toggle__btn svg {
