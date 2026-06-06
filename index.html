@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark" data-eclipse-state="pre" data-countdown-state="pre">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Eclipse solar total del 12 de agosto de 2026 — seguimiento en directo desde Covarrubias, Burgos. Countdown, mapa del eclipse, previsión meteorológica y guía de observación segura.">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#07090f">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f0e6">
+
+  <meta property="og:title"       content="SolarRubias 2026 · Eclipse Total · Covarrubias">
+  <meta property="og:description" content="12 agosto 2026 · 20:28 CEST · Covarrubias, Burgos">
+  <meta property="og:type"        content="website">
+
+  <title>SolarRubias 2026 · Eclipse Total · Covarrubias</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <style>
+    /* Map marker */
+    .map-site-marker { position: relative; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+    .map-site-marker__ring { position: absolute; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--accent); animation: corona-pulse 2s ease-in-out infinite; }
+    .map-site-marker__dot  { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); position: relative; z-index: 1; }
+    .map-popup__title  { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; }
+    .map-popup__sub    { font-size: 0.75rem; opacity: 0.7; margin-bottom: 4px; }
+    .map-popup__coords { font-family: monospace; font-size: 0.7rem; opacity: 0.6; margin-bottom: 4px; }
+    .map-popup__note   { font-size: 0.7rem; color: #d89050; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       THEME TOGGLE — dual-icon pill
+       ☀  = light mode   |   eclipsed sun = dark mode
+       ═══════════════════════════════════════════════ -->
+  <div class="theme-toggle" role="group" aria-label="Cambiar tema">
+
+    <!-- Sun → activates light mode -->
+    <button class="theme-toggle__btn theme-toggle__btn--light"
+            data-theme-btn="light"
+            aria-pressed="false"
+            title="Modo día">
+      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+        <circle cx="8.5" cy="8.5" r="3.2" fill="currentColor"/>
+        <line x1="8.5" y1="1"   x2="8.5" y2="3"   stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="8.5" y1="14"  x2="8.5" y2="16"  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="1"   y1="8.5" x2="3"   y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="14"  y1="8.5" x2="16"  y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="3.4" y1="3.4" x2="4.8" y2="4.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="12.2" y1="12.2" x2="13.6" y2="13.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="13.6" y1="3.4" x2="12.2" y2="4.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="4.8" y1="12.2" x2="3.4" y2="13.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Eclipsed sun → activates dark mode -->
+    <button class="theme-toggle__btn theme-toggle__btn--dark"
+            data-theme-btn="dark"
+            aria-pressed="true"
+            title="Modo noche">
+      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+        <!-- Outer corona glow ring -->
+        <circle cx="8.5" cy="8.5" r="7.5" stroke="currentColor" stroke-width="0.6" opacity="0.25"/>
+        <!-- Mid corona ring -->
+        <circle cx="8.5" cy="8.5" r="5.8" stroke="currentColor" stroke-width="1.1" opacity="0.55"/>
+        <!-- Short cardinal streamers -->
+        <line x1="8.5" y1="1.2"  x2="8.5" y2="2.2"  stroke="currentColor" stroke-width="0.9" stroke-linecap="round" opacity="0.65"/>
+        <line x1="15.8" y1="8.5" x2="14.8" y2="8.5" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" opacity="0.65"/>
+        <line x1="8.5" y1="15.8" x2="8.5" y2="14.8" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" opacity="0.65"/>
+        <line x1="1.2" y1="8.5"  x2="2.2" y2="8.5"  stroke="currentColor" stroke-width="0.9" stroke-linecap="round" opacity="0.65"/>
+        <!-- Diagonal streamers -->
+        <line x1="3.0" y1="3.0" x2="3.8" y2="3.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
+        <line x1="14.0" y1="3.0" x2="13.2" y2="3.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
+        <line x1="3.0" y1="14.0" x2="3.8" y2="13.2" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
+        <line x1="14.0" y1="14.0" x2="13.2" y2="13.2" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
+        <!-- Moon disk — inherits bg-base via JS-set style -->
+        <circle class="eclipse-moon-disk" cx="8.5" cy="8.5" r="4.5"/>
+      </svg>
+    </button>
+
+  </div><!-- /.theme-toggle -->
+
+
+  <main class="page-wrapper">
+
+    <!-- ═══════════════════════════════════════════════
+         § 1  HERO — COUNTDOWN
+         ═══════════════════════════════════════════════ -->
+    <section class="section section--hero" aria-labelledby="hero-title">
+
+      <!-- Corona background art (generated by inline script below) -->
+      <div class="hero__corona" aria-hidden="true" id="heroCorona"></div>
+
+      <!-- All hero content floats above the corona art -->
+      <div class="hero__content">
+
+        <p class="hero__location" aria-label="Ubicación">
+          42°03′N · 3°31′O · Covarrubias, Burgos · 894 m
+        </p>
+
+        <h1 id="hero-title" class="hero__title">
+          Solar<span class="hero__title-sep" aria-hidden="true">◉</span>Rubias
+          <span class="hero__title-year">2026</span>
+        </h1>
+
+        <p class="hero__subtitle">Eclipse Total de Sol · 12 de agosto · Covarrubias, Burgos</p>
+
+        <p class="countdown__context" data-countdown="context" aria-live="polite">
+          El eclipse total comienza en
+        </p>
+
+        <div class="countdown" role="timer" aria-live="off" aria-label="Cuenta atrás para el eclipse">
+
+          <div class="countdown__unit" data-countdown-unit aria-label="días">
+            <span class="countdown__digit" data-countdown="days">—</span>
+            <span class="countdown__label" aria-hidden="true">días</span>
+          </div>
+          <span class="countdown__sep" data-countdown="sep-days" aria-hidden="true">:</span>
+
+          <div class="countdown__unit" data-countdown-unit aria-label="horas">
+            <span class="countdown__digit" data-countdown="hours">—</span>
+            <span class="countdown__label" aria-hidden="true">horas</span>
+          </div>
+          <span class="countdown__sep" data-countdown="sep-hours" aria-hidden="true">:</span>
+
+          <div class="countdown__unit" data-countdown-unit aria-label="minutos">
+            <span class="countdown__digit" data-countdown="minutes">—</span>
+            <span class="countdown__label" aria-hidden="true">min</span>
+          </div>
+          <span class="countdown__sep" aria-hidden="true">:</span>
+
+          <div class="countdown__unit" data-countdown-unit aria-label="segundos">
+            <span class="countdown__digit" data-countdown="seconds">—</span>
+            <span class="countdown__label" aria-hidden="true">seg</span>
+          </div>
+
+        </div>
+
+        <p hidden data-countdown="post-message" class="hero__subtitle">
+          Gracias por observar el eclipse. El próximo eclipse total en España:
+          <a href="https://en.wikipedia.org/wiki/Solar_eclipse_of_August_2,_2027"
+             target="_blank" rel="noopener" style="color: var(--accent);">2 agosto 2027</a>.
+        </p>
+
+        <div class="phase-bar"
+             role="progressbar"
+             aria-label="Progreso del eclipse"
+             aria-valuemin="0"
+             aria-valuemax="100"
+             aria-valuenow="0"
+             data-phase-bar>
+          <div class="phase-bar__track">
+            <div class="phase-bar__segment phase-bar__segment--elapsed"   id="bar-elapsed"></div>
+            <div class="phase-bar__segment phase-bar__segment--totality"  id="bar-totality"></div>
+            <div class="phase-bar__segment phase-bar__segment--remaining" id="bar-remaining"></div>
+          </div>
+          <div class="phase-bar__labels">
+            <span>C1 · Inicio parcial</span>
+            <span>Totalidad</span>
+            <span>C4 · Fin parcial</span>
+          </div>
+        </div>
+
+      </div><!-- /.hero__content -->
+
+    </section>
+    <!-- /§1 -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         § 2  MAPA DEL ECLIPSE
+         ═══════════════════════════════════════════════ -->
+    <section class="section section--fullbleed" aria-labelledby="map-title">
+      <div class="page-wrapper">
+        <h2 class="section__title" id="map-title">Mapa del eclipse</h2>
+        <p class="section__label">Covarrubias y la banda de totalidad · NASA/Espenak</p>
+      </div>
+
+      <div class="map-container" id="eclipse-map"
+           role="img"
+           aria-label="Mapa interactivo mostrando el recorrido del eclipse solar del 12 agosto 2026 sobre España">
+      </div>
+
+      <div class="page-wrapper">
+        <div class="map-overlay-controls" style="position:relative; bottom:auto; right:auto; margin-top: var(--space-3);">
+          <button class="map-btn" data-map-toggle="topo" aria-pressed="true">Topografía</button>
+          <button class="map-btn" data-map-toggle="osm"  aria-pressed="false">Callejero</button>
+        </div>
+        <p class="forecast-notice" style="margin-top:var(--space-2)">
+          Datos eclipse: <a href="https://eclipse.gsfc.nasa.gov/SEpath/SEpath2001/SE2026Aug12Tpath.html"
+                    target="_blank" rel="noopener">NASA/Espenak</a> ·
+          Mapa: <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a>
+        </p>
+      </div>
+    </section>
+    <!-- /§2 -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         § 3  HORARIOS DE CONTACTO
+         ═══════════════════════════════════════════════ -->
+    <section class="section" aria-labelledby="times-title" data-eclipse-section>
+      <h2 class="section__title" id="times-title">Horarios del eclipse</h2>
+      <div class="section__label">
+        Covarrubias · 42.06°N 3.52°O · 894 m
+        <span class="confidence-badge confidence-badge--estimated" aria-live="polite">~ estimado</span>
+      </div>
+
+      <div class="contact-grid">
+
+        <div class="contact-card card" aria-label="Primer contacto">
+          <p class="contact-card__phase">C1 · Inicio parcial</p>
+          <span class="contact-card__time" data-eclipse="c1-time">
+            <span class="skeleton skeleton--number">…</span>
+          </span>
+          <p class="contact-card__sub" data-eclipse="c1-utc">CEST</p>
+        </div>
+
+        <div class="contact-card card contact-card--c2" aria-label="Segundo contacto — inicio totalidad">
+          <p class="contact-card__phase contact-card__phase--totality">C2 · Inicio totalidad</p>
+          <span class="contact-card__time" data-eclipse="c2-time">
+            <span class="skeleton skeleton--number">…</span>
+          </span>
+          <p class="contact-card__sub" data-eclipse="c2-utc">CEST</p>
+        </div>
+
+        <div class="contact-card card" aria-label="Máximo eclipse">
+          <p class="contact-card__phase">Máximo eclipse</p>
+          <span class="contact-card__time" data-eclipse="cmax-time">
+            <span class="skeleton skeleton--number">…</span>
+          </span>
+          <p class="contact-card__sub">
+            Sol: <span data-eclipse="sun-alt">8.1°</span> alt ·
+            <span data-eclipse="sun-azm">282.7°</span> azm
+          </p>
+        </div>
+
+        <div class="contact-card card contact-card--c3" aria-label="Tercer contacto — fin totalidad">
+          <p class="contact-card__phase contact-card__phase--totality">C3 · Fin totalidad</p>
+          <span class="contact-card__time" data-eclipse="c3-time">
+            <span class="skeleton skeleton--number">…</span>
+          </span>
+          <p class="contact-card__sub" data-eclipse="c3-utc">CEST</p>
+        </div>
+
+        <div class="contact-card card" aria-label="Puesta de sol — fin visibilidad">
+          <p class="contact-card__phase">Ocaso · Fin visibilidad</p>
+          <span class="contact-card__time" data-eclipse="sunset-time">21:19 CEST</span>
+          <p class="contact-card__sub">Eclipse parcial continúa (no visible)</p>
+        </div>
+
+        <div class="contact-card contact-card--duration card" aria-label="Duración de la totalidad">
+          <p class="contact-card__phase contact-card__phase--totality">Duración totalidad</p>
+          <span class="contact-card__duration-value" data-eclipse="duration">1m 46s</span>
+          <p class="contact-card__sub">C2 → C3</p>
+        </div>
+
+      </div>
+
+      <aside class="horizon-note" role="note">
+        <span class="horizon-note__icon" aria-hidden="true">⚠</span>
+        <p>El Sol estará a solo <strong data-eclipse="sun-alt">8.1°</strong> sobre el horizonte en el momento del máximo.
+           Azimut confirmado: <strong data-eclipse="sun-azm">282.7°</strong> — prácticamente <strong>due west (poniente)</strong>.
+           Es imprescindible visión despejada hacia el oeste desde el punto de observación.
+           Verificar orografía y posibles obstáculos. El eclipse parcial continúa
+           <strong>después del ocaso</strong> (<span data-eclipse="sunset-time">21:19 CEST</span>)
+           — la fase parcial final no será visible desde Covarrubias.</p>
+      </aside>
+
+    </section>
+    <!-- /§3 -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         § 4  TIEMPO EN COVARRUBIAS
+         ═══════════════════════════════════════════════ -->
+    <section class="section" aria-labelledby="weather-title" data-weather-section>
+      <h2 class="section__title" id="weather-title">Tiempo en Covarrubias</h2>
+      <p class="section__label">Condiciones actuales · Open-Meteo</p>
+
+      <div class="weather-metrics">
+
+        <div class="weather-metric" data-weather="cloud-widget">
+          <div class="weather-metric__icon" aria-hidden="true">◑</div>
+          <span class="weather-metric__value" data-weather="cloud-value">—</span>
+          <span class="weather-metric__label">Nubosidad</span>
+        </div>
+
+        <div class="weather-metric">
+          <div class="weather-metric__icon" aria-hidden="true">🌡</div>
+          <span class="weather-metric__value" data-weather="temp-value">—</span>
+          <span class="weather-metric__label">Temperatura</span>
+        </div>
+
+        <div class="weather-metric">
+          <div class="weather-metric__icon" aria-hidden="true">💨</div>
+          <span class="weather-metric__value" data-weather="wind-value">—</span>
+          <span class="weather-metric__label">Viento</span>
+        </div>
+
+      </div>
+
+      <p class="forecast-notice" style="display:flex; justify-content:space-between; align-items:center;">
+        <span data-weather="forecast-status" aria-live="polite">Cargando…</span>
+        <span style="color:var(--text-tertiary)">
+          Actualizado: <span data-weather="current-time">—</span>
+        </span>
+      </p>
+
+      <p class="forecast-notice" data-weather="eclipse-forecast-banner" hidden
+         style="color: var(--accent); margin-top: var(--space-1);"
+         aria-live="polite"></p>
+
+      <div class="weather-history card" data-weather="history-section">
+        <p class="weather-history__title">
+          Nubosidad histórica · 12 agosto · 20:00 CEST (ERA5 / Open-Meteo)
+        </p>
+        <div class="history-bars" data-weather="history-bars" aria-label="Histograma de nubosidad histórica">
+          <div class="history-bar skeleton" style="height:40%"></div>
+          <div class="history-bar skeleton" style="height:55%"></div>
+          <div class="history-bar skeleton" style="height:30%"></div>
+          <div class="history-bar skeleton" style="height:48%"></div>
+          <div class="history-bar skeleton" style="height:38%"></div>
+          <div class="history-bar skeleton" style="height:62%"></div>
+          <div class="history-bar skeleton" style="height:28%"></div>
+          <div class="history-bar skeleton" style="height:44%"></div>
+          <div class="history-bar skeleton" style="height:52%"></div>
+          <div class="history-bar skeleton" style="height:36%"></div>
+        </div>
+        <div class="history-axis">
+          <span data-weather="history-axis">2015 – 2024</span>
+        </div>
+        <p class="history-avg" data-weather="history-avg" aria-live="polite">Calculando media histórica…</p>
+      </div>
+
+    </section>
+    <!-- /§4 -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         § 5  CONFERENCIA PREVIA AL ECLIPSE
+         ═══════════════════════════════════════════════ -->
+    <section class="section" aria-labelledby="lecture-title">
+      <h2 class="section__title" id="lecture-title">Conferencia previa al eclipse</h2>
+      <p class="section__label">Tarde del 11 de agosto de 2026 · Hora y lugar por confirmar</p>
+
+      <div class="card card--accent lecture-card" style="padding: var(--space-5) var(--space-6);">
+
+        <div class="lecture-card__header" style="
+          display: flex; align-items: flex-start; gap: var(--space-4);
+          margin-bottom: var(--space-5);
+          padding-bottom: var(--space-5);
+          border-bottom: 1px solid var(--border-subtle);
+        ">
+          <img src="img/diego-lopez-camara.webp"
+               alt="Diego López-Cámara"
+               width="56" height="56"
+               style="
+                 flex-shrink: 0;
+                 width: 56px; height: 56px;
+                 border-radius: 50%;
+                 border: 1.5px solid var(--accent);
+                 object-fit: cover;
+                 object-position: center top;
+               ">
+
+          <div>
+            <p style="
+              font-family: var(--font-display); font-size: var(--text-xl);
+              font-weight: 600; color: var(--text-primary);
+              line-height: var(--leading-snug); margin-bottom: var(--space-1);
+            ">Diego López-Cámara</p>
+            <p style="font-family: var(--font-ui); font-size: var(--text-sm); color: var(--accent); margin-bottom: var(--space-1);">Astrofísico · UNAM</p>
+            <p style="font-family: var(--font-ui); font-size: var(--text-xs); color: var(--text-tertiary);">Universidad Nacional Autónoma de México</p>
+          </div>
+        </div>
+
+        <p style="
+          font-family: var(--font-display); font-size: var(--text-lg);
+          font-weight: 400; font-style: italic;
+          color: var(--text-primary); line-height: var(--leading-snug);
+          margin-bottom: var(--space-4);
+        ">Conferencia sobre el eclipse solar total del 12 de agosto de 2026</p>
+
+        <p style="
+          font-family: var(--font-body); font-size: var(--text-base);
+          color: var(--text-secondary); line-height: var(--leading-loose);
+          margin-bottom: var(--space-5);
+        ">
+          Investigador del Instituto de Astronomía de la UNAM, especialista en
+          astrofísica teórica y fenómenos de alta energía. En esta conferencia el
+          Prof. López-Cámara explicará la ciencia del eclipse solar total, su
+          importancia histórica para España y las claves para observarlo con seguridad
+          desde Covarrubias.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-5);">
+
+          <div style="background: var(--bg-elevated); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); border: 1px solid var(--border-subtle);">
+            <p style="font-family:var(--font-ui);font-size:var(--text-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:var(--space-1);">Fecha</p>
+            <p style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--text-primary);">11 agosto 2026</p>
+            <p style="font-family:var(--font-ui);font-size:var(--text-xs);color:var(--text-secondary);">Tarde · día previo al eclipse</p>
+          </div>
+
+          <div style="background: var(--bg-elevated); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); border: 1px solid var(--border-subtle);">
+            <p style="font-family:var(--font-ui);font-size:var(--text-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:var(--space-1);">Hora</p>
+            <p style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--text-primary);">Por confirmar</p>
+            <p style="font-family:var(--font-ui);font-size:var(--text-xs);color:var(--text-secondary);">Se actualizará en esta página</p>
+          </div>
+
+          <div style="background: var(--bg-elevated); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); border: 1px solid var(--border-subtle);">
+            <p style="font-family:var(--font-ui);font-size:var(--text-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:var(--space-1);">Lugar</p>
+            <p style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--text-primary);">Por confirmar</p>
+            <p style="font-family:var(--font-ui);font-size:var(--text-xs);color:var(--text-secondary);">Covarrubias, Burgos</p>
+          </div>
+
+          <div style="background: var(--bg-elevated); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); border: 1px solid var(--border-subtle);">
+            <p style="font-family:var(--font-ui);font-size:var(--text-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:var(--space-1);">Idioma</p>
+            <p style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--text-primary);">Español</p>
+            <p style="font-family:var(--font-ui);font-size:var(--text-xs);color:var(--text-secondary);">Entrada libre</p>
+          </div>
+
+        </div>
+
+        <a href="https://akanaba.org/diego-lopez-camara"
+           target="_blank" rel="noopener noreferrer"
+           style="
+             display: inline-flex; align-items: center; gap: var(--space-2);
+             font-family: var(--font-ui); font-size: var(--text-sm);
+             color: var(--accent); text-decoration: none;
+             border: 1px solid var(--accent-dim);
+             border-radius: var(--radius-full);
+             padding: var(--space-2) var(--space-4);
+             transition: all 0.2s;
+           "
+           onmouseover="this.style.background='var(--accent-dim)'"
+           onmouseout="this.style.background='transparent'">
+          <span>Perfil del ponente</span>
+          <span aria-hidden="true" style="font-size:0.9em;">↗</span>
+        </a>
+
+      </div>
+    </section>
+    <!-- /§5 -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         § 6  LA CIENCIA DEL ECLIPSE
+         ═══════════════════════════════════════════════ -->
+    <section class="section" aria-labelledby="science-title">
+      <h2 class="section__title" id="science-title">La ciencia del eclipse</h2>
+      <p class="section__label">Contenido en español · en elaboración</p>
+
+      <div class="accordion" role="list">
+
+        <details class="accordion__item" role="listitem">
+          <summary class="accordion__trigger" aria-expanded="false">
+            <span class="accordion__trigger-text">¿Cómo se produce un eclipse solar total?</span>
+            <span class="accordion__icon" aria-hidden="true">▼</span>
+          </summary>
+          <div class="accordion__body">
+            <p><em>[Placeholder — contenido pendiente de aportación]</em></p>
+            <p>Un eclipse solar total se produce cuando la Luna se interpone exactamente entre la Tierra y el Sol, ocultando completamente el disco solar para los observadores situados en la estrecha franja de totalidad…</p>
+          </div>
+        </details>
+
+        <details class="accordion__item" role="listitem">
+          <summary class="accordion__trigger" aria-expanded="false">
+            <span class="accordion__trigger-text">La corona solar: la atmósfera exterior del Sol</span>
+            <span class="accordion__icon" aria-hidden="true">▼</span>
+          </summary>
+          <div class="accordion__body">
+            <p><em>[Placeholder — contenido pendiente de aportación]</em></p>
+            <p>Durante los escasos minutos de totalidad, la corona solar —la tenue atmósfera exterior del Sol— se revela a simple vista…</p>
+          </div>
+        </details>
+
+        <details class="accordion__item" role="listitem">
+          <summary class="accordion__trigger" aria-expanded="false">
+            <span class="accordion__trigger-text">El anillo de diamante y las perlas de Baily</span>
+            <span class="accordion__icon" aria-hidden="true">▼</span>
+          </summary>
+          <div class="accordion__body">
+            <p><em>[Placeholder — contenido pendiente de aportación]</em></p>
+            <p>Instantes antes y después de la totalidad, la luz del Sol se filtra entre los valles del limbo lunar creando un efecto conocido como perlas de Baily…</p>
+          </div>
+        </details>
+
+        <details class="accordion__item" role="listitem">
+          <summary class="accordion__trigger" aria-expanded="false">
+            <span class="accordion__trigger-text">¿Por qué al atardecer? Lo especial del eclipse de 2026</span>
+            <span class="accordion__icon" aria-hidden="true">▼</span>
+          </summary>
+          <div class="accordion__body">
+            <p><em>[Placeholder — contenido pendiente de aportación]</em></p>
+            <p>Este eclipse tiene una particularidad única: ocurre durante la puesta de sol. El Sol estará apenas a 8° sobre el horizonte cuando la Luna lo tape por completo…</p>
+          </div>
+        </details>
+
+        <details class="accordion__item" role="listitem">
+          <summary class="accordion__trigger" aria-expanded="false">
+            <span class="accordion__trigger-text">Historia: el eclipse de 1905 sobre la Península Ibérica</span>
+            <span class="accordion__icon" aria-hidden="true">▼</span>
+          </summary>
+          <div class="accordion__body">
+            <p><em>[Placeholder — contenido pendiente de aportación]</em></p>
+            <p>El último eclipse total visible desde el norte de España antes del de 2026 ocurrió el 30 de agosto de 1905, recorriendo casi el mismo camino que el de este año…</p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+    <!-- /§6 -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         § 7  OBSERVACIÓN SEGURA
+         ═══════════════════════════════════════════════ -->
+    <section class="section" aria-labelledby="safety-title">
+      <h2 class="section__title" id="safety-title">Cómo observar con seguridad</h2>
+
+      <div class="safety-banner card" role="alert">
+        <div class="safety-banner__header">
+          <span class="safety-banner__icon" aria-hidden="true">⚠</span>
+          <h3 class="safety-banner__title">Nunca mires el Sol sin protección</h3>
+        </div>
+        <p class="safety-banner__body">
+          Excepto durante la totalidad (entre C2 y C3). En todas las demás fases del eclipse
+          —incluido el inicio y el final de la totalidad— utiliza gafas solares homologadas
+          <strong>ISO 12312-2</strong>.
+        </p>
+      </div>
+
+      <div class="card" style="padding: var(--space-4) var(--space-5); margin-bottom: var(--space-4);">
+        <p class="section__label" style="margin-bottom: var(--space-3);">Protocolo filtro cámara / móvil</p>
+        <div class="filter-protocol">
+          <div class="filter-protocol__row">
+            <span>C1 → C2 · Fase parcial</span>
+            <span>Filtro solar sobre objetivo</span>
+          </div>
+          <div class="filter-protocol__row filter-protocol__row--active">
+            <span>C2 → C3 · <strong>TOTALIDAD</strong></span>
+            <span>Retirar filtro (corona)</span>
+          </div>
+          <div class="filter-protocol__row">
+            <span>C3 → C4 · Fase parcial</span>
+            <span>Volver a poner filtro</span>
+          </div>
+        </div>
+        <p style="font-size: var(--text-xs); color: var(--text-tertiary); margin-top: var(--space-2);">
+          Usa película Baader AstroSolar o adaptador ISO 12312-2 para el objetivo.
+          Practica el quitarlo/ponerlo antes del día del eclipse.
+        </p>
+      </div>
+
+      <div class="accordion" role="list">
+
+        <details class="accordion__item" role="listitem">
+          <summary class="accordion__trigger" aria-expanded="false">
+            <span class="accordion__trigger-text">Gafas solares homologadas ISO 12312-2</span>
+            <span class="accordion__icon" aria-hidden="true">▼</span>
+          </summary>
+          <div class="accordion__body">
+            <p><em>[Placeholder — contenido pendiente de aportación]</em></p>
+            <p>Las gafas deben llevar impreso el estándar ISO 12312-2 y el nombre del fabricante. No sirven gafas de sol convencionales, aunque sean muy oscuras…</p>
+          </div>
+        </details>
+
+        <details class="accordion__item" role="listitem">
+          <summary class="accordion__trigger" aria-expanded="false">
+            <span class="accordion__trigger-text">Fotografiar el eclipse con el móvil</span>
+            <span class="accordion__icon" aria-hidden="true">▼</span>
+          </summary>
+          <div class="accordion__body">
+            <p><em>[Placeholder — contenido pendiente de aportación]</em></p>
+            <p>El sensor del móvil puede dañarse permanentemente si apunta al Sol sin filtro durante las fases parciales. Durante la totalidad, retira el filtro para capturar la corona…</p>
+          </div>
+        </details>
+
+        <details class="accordion__item" role="listitem">
+          <summary class="accordion__trigger" aria-expanded="false">
+            <span class="accordion__trigger-text">¿Qué hacer si se nubla el cielo?</span>
+            <span class="accordion__icon" aria-hidden="true">▼</span>
+          </summary>
+          <div class="accordion__body">
+            <p><em>[Placeholder — contenido pendiente de aportación]</em></p>
+            <p>Si la previsión indica cobertura nubosa, considera desplazarte hacia el norte de la banda de totalidad (dirección Burgos–Bilbao) donde la probabilidad histórica de cielos despejados es mayor…</p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+    <!-- /§7 -->
+
+
+    <!-- ═══════════════════════════════════════════════
+         FOOTER
+         ═══════════════════════════════════════════════ -->
+    <footer class="footer" role="contentinfo">
+      <div class="footer__grid">
+        <p class="footer__text">
+          Datos del eclipse: <a href="https://eclipse.gsfc.nasa.gov/" target="_blank" rel="noopener">NASA/Espenak (GSC)</a> ·
+          Tiempos de contacto: <a href="https://aa.usno.navy.mil/data/SolarEclipses" target="_blank" rel="noopener">USNO</a>
+        </p>
+        <p class="footer__text">
+          Meteorología: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> (ERA5 / ECMWF) ·
+          Mapa: <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a> ·
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a>
+        </p>
+        <p class="footer__coords">42.0593°N · 3.5241°O · 894 m · Covarrubias, Burgos</p>
+      </div>
+    </footer>
+
+  </main>
+
+
+  <!-- ═══════════════════════════════════════════════
+       TOAST: dark mode suggestion
+       ═══════════════════════════════════════════════ -->
+  <div class="toast toast--theme-suggest" role="alert" aria-live="polite">
+    <span>El cielo se oscurece pronto ☽</span>
+    <button data-action="accept-dark" style="
+      background: var(--accent); color: var(--bg-base);
+      border: none; border-radius: var(--radius-md);
+      padding: 4px 12px; cursor: pointer;
+      font-family: var(--font-ui); font-size: var(--text-xs); font-weight: 600;
+    ">Modo noche</button>
+    <button class="toast__close" aria-label="Cerrar">✕</button>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SCRIPTS
+       ═══════════════════════════════════════════════ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+
+  <!-- ── INLINE: theme toggle ──────────────────────────────── -->
+  <script>
+  (function () {
+    var root = document.documentElement;
+
+    function applyTheme(theme) {
+      root.dataset.theme = theme;
+      document.querySelectorAll('.theme-toggle__btn').forEach(function (btn) {
+        btn.setAttribute('aria-pressed', btn.dataset.themeBtn === theme ? 'true' : 'false');
+      });
+      // Keep moon disk colour in sync with bg-base
+      syncMoonDisk();
+      try { localStorage.setItem('eclipse-theme', theme); } catch(e) {}
+    }
+
+    function syncMoonDisk() {
+      var style = getComputedStyle(root);
+      var bg = style.getPropertyValue('--bg-base').trim();
+      document.querySelectorAll('.eclipse-moon-disk').forEach(function (el) {
+        el.style.fill = bg || (root.dataset.theme === 'light' ? '#f4f0e6' : '#07090f');
+      });
+    }
+
+    // Restore saved preference or honour html[data-theme]
+    var saved;
+    try { saved = localStorage.getItem('eclipse-theme'); } catch(e) {}
+    var initial = (saved === 'light' || saved === 'dark') ? saved : (root.dataset.theme || 'dark');
+    applyTheme(initial);
+
+    // Click handler — works before app.js loads
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('.theme-toggle__btn');
+      if (btn && btn.dataset.themeBtn) applyTheme(btn.dataset.themeBtn);
+    });
+  })();
+  </script>
+
+  <!-- ── INLINE: corona parallax ───────────────────────────── -->
+  <script>
+  (function () {
+    var corona = document.getElementById('heroCorona');
+    if (!corona) return;
+    var ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(function () {
+          var y = window.scrollY || window.pageYOffset;
+          corona.style.transform = 'translateX(-50%) translateY(' + (y * 0.45) + 'px)';
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+  })();
+  </script>
+
+  <!-- ── INLINE: hero corona art ──────────────────────────── -->
+  <script>
+  (function () {
+    var container = document.getElementById('heroCorona');
+    if (!container) return;
+
+    var ns  = 'http://www.w3.org/2000/svg';
+    var W   = 520, H = 520, cx = 260, cy = 260, rMoon = 82;
+
+    // [angle_deg, extra_length, stroke_width, opacity]
+    var rays = [
+      [0,   108, 0.80, 0.34], [18,   50, 0.48, 0.21], [36,  142, 0.90, 0.38],
+      [54,   65, 0.55, 0.25], [72,  162, 0.92, 0.40], [90,   44, 0.44, 0.19],
+      [108, 118, 0.82, 0.36], [126,  58, 0.50, 0.23], [144, 148, 0.90, 0.39],
+      [162,  72, 0.58, 0.27], [180, 126, 0.84, 0.37], [198,  52, 0.46, 0.21],
+      [216, 136, 0.88, 0.38], [234,  68, 0.54, 0.25], [252, 156, 0.91, 0.40],
+      [270,  46, 0.44, 0.19], [288, 114, 0.80, 0.35], [306,  60, 0.50, 0.23],
+      [324, 140, 0.89, 0.38], [342,  78, 0.60, 0.28]
+    ];
+
+    var svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    svg.setAttribute('xmlns', ns);
+    svg.setAttribute('aria-hidden', 'true');
+    svg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
+
+    // Radial gradient — corona glow
+    var defs = document.createElementNS(ns, 'defs');
+    var rg   = document.createElementNS(ns, 'radialGradient');
+    rg.id = 'hcg';
+    rg.setAttribute('cx', '50%'); rg.setAttribute('cy', '50%'); rg.setAttribute('r', '50%');
+    [[0, 0.22], [0.32, 0.10], [0.58, 0.04], [1, 0]].forEach(function (s) {
+      var stop = document.createElementNS(ns, 'stop');
+      stop.setAttribute('offset', s[0]);
+      stop.style.stopColor   = 'var(--accent)';
+      stop.style.stopOpacity = s[1];
+      rg.appendChild(stop);
+    });
+    defs.appendChild(rg);
+    svg.appendChild(defs);
+
+    // Glow circle
+    var glow = document.createElementNS(ns, 'circle');
+    glow.setAttribute('cx', cx); glow.setAttribute('cy', cy); glow.setAttribute('r', W / 2);
+    glow.setAttribute('fill', 'url(#hcg)');
+    svg.appendChild(glow);
+
+    // Streamers
+    rays.forEach(function (r) {
+      var rad = r[0] * Math.PI / 180;
+      var x1  = (cx + rMoon * Math.cos(rad)).toFixed(2);
+      var y1  = (cy + rMoon * Math.sin(rad)).toFixed(2);
+      var x2  = (cx + (rMoon + r[1]) * Math.cos(rad)).toFixed(2);
+      var y2  = (cy + (rMoon + r[1]) * Math.sin(rad)).toFixed(2);
+
+      var line = document.createElementNS(ns, 'line');
+      line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+      line.setAttribute('stroke-linecap', 'round');
+      line.style.stroke       = 'var(--accent)';
+      line.style.strokeWidth  = r[2];
+      line.style.opacity      = r[3];
+      svg.appendChild(line);
+    });
+
+    // Moon disk — matches bg-base, painted last so it occludes ray bases
+    var moon = document.createElementNS(ns, 'circle');
+    moon.setAttribute('cx', cx); moon.setAttribute('cy', cy); moon.setAttribute('r', rMoon);
+    moon.style.fill = 'var(--bg-base)';
+    svg.appendChild(moon);
+
+    // Inner corona ring
+    var ring = document.createElementNS(ns, 'circle');
+    ring.setAttribute('cx', cx); ring.setAttribute('cy', cy); ring.setAttribute('r', rMoon + 2.5);
+    ring.setAttribute('fill', 'none');
+    ring.style.stroke       = 'var(--accent)';
+    ring.style.strokeWidth  = '1.8';
+    ring.style.opacity      = '0.42';
+    svg.appendChild(ring);
+
+    container.appendChild(svg);
+  })();
+  </script>
+
+</body>
+</html>

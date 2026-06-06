@@ -1,0 +1,87 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "eclipse":    "Total Solar Eclipse 2026-08-12",
+    "source":     "NASA/Espenak GSC — eclipse.gsfc.nasa.gov/SEpath/SEpath2001/SE2026Aug12Tpath.html",
+    "method":     "Exact WGS-84 coordinates from Espenak path table at 120-second intervals. Not estimated.",
+    "delta_t":    "71.4s",
+    "ephemeris":  "VSOP87/ELP2000-85",
+    "verified": {
+      "Covarrubias_42.06N_3.52W": "INSIDE, 7.6km north of centerline, 1m46.8s (USNO confirmed)",
+      "Madrid_40.42N_3.70W":       "OUTSIDE — south of southern limit by 14km",
+      "Bilbao_43.26N_2.93W":       "INSIDE — north limit passes 11km north of Bilbao",
+      "A_Coruna_43.37N_8.40W":     "INSIDE — 43km north of southern limit",
+      "Barcelona_41.39N_2.17E":    "OUTSIDE — 29km north of northern limit",
+      "Valencia_39.47N_0.38W":     "INSIDE — 7km north of southern limit"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "totality-zone",
+      "properties": {
+        "type": "totality_polygon",
+        "description": "Zone of totality — Atlantic, Iberian Peninsula, Balearics, Mediterranean"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-10.267, 48.208],
+          [ -8.802, 47.038],
+          [ -7.077, 45.802],
+          [ -4.948, 44.457],
+          [ -2.085, 42.908],
+          [  3.295, 40.665],
+          [  6.340, 39.708],
+          [  4.540, 37.690],
+          [ -4.040, 40.683],
+          [ -7.237, 42.263],
+          [ -9.552, 43.607],
+          [-11.420, 44.832],
+          [-13.008, 45.983],
+          [-14.397, 47.083],
+          [-15.638, 48.147],
+          [-10.267, 48.208]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "centerline",
+      "properties": {
+        "type": "centerline",
+        "description": "Central line of totality — maximum duration along this line"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-13.048, 48.212],
+          [-11.715, 47.102],
+          [-10.190, 45.943],
+          [ -8.398, 44.713],
+          [ -6.188, 43.372],
+          [ -3.185, 41.817],
+          [  2.950, 39.408],
+          [  5.415, 38.680]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-covarrubias",
+      "properties": {
+        "type":             "observation_site",
+        "name":             "Covarrubias",
+        "elevation_m":      894,
+        "inside_totality":  true,
+        "usno_duration_s":  106.8,
+        "km_from_centerline": 7.6,
+        "note": "7.6 km north of centerline. Sun 8.1° altitude at C2 — clear western horizon essential."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.5241, 42.0593]
+      }
+    }
+  ]
+}
