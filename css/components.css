@@ -15,23 +15,34 @@
 }
 
 .theme-toggle__btn {
-  color: var(--text-tertiary);
-}
-
-.theme-toggle__btn:hover {
   color: var(--text-secondary);
 }
 
-/* Active mode button — highlighted */
+.theme-toggle__btn:hover {
+  color: var(--text-primary);
+}
+
+/*
+  Active button: driven by aria-pressed, which is kept in sync with [data-theme]
+  via MutationObserver in the inline script — works whether our JS or app.js changes the theme.
+*/
 .theme-toggle__btn[aria-pressed="true"] {
   background: var(--accent-dim);
   color: var(--accent);
 }
 
+/* Remove the data-theme descendant rules — replaced by aria-pressed above */
+
 /* Icon SVGs inside the buttons inherit currentColor */
 .theme-toggle__btn svg {
   display: block;
   flex-shrink: 0;
+}
+
+/* Moon disk in the eclipse icon always matches the page background */
+.eclipse-moon-disk {
+  fill: var(--bg-base);
+  transition: fill var(--dur-base);
 }
 
 
