@@ -66,28 +66,44 @@ const CONFIG = {
     url:   'https://en.wikipedia.org/wiki/Solar_eclipse_of_August_2,_2027',
   },
 
-  /* ─── LECTURE / EVENT ───────────────────────────────────── */
-  lecture: {
-    enabled:       true,
-    speaker: {
-      name:        'Diego López-Cámara',
-      title:       'Astrofísico',
-      institution: 'Universidad Nacional Autónoma de México (UNAM)',
-      bio:         'Investigador del Instituto de Astronomía de la UNAM. Especialista en astrofísica teórica, fenómenos de alta energía y divulgación científica.',
-      url:         'https://akanaba.org/diego-lopez-camara',
-      urlLabel:    'akanaba.org',
+  /* ─── LECTURES ──────────────────────────────────────────────── */
+  // Both confirmed — Asociación Astronómica Arlanza programme, agosto 2026
+  lectures: [
+    {
+      speaker: {
+        name:        'Diego López-Cámara',
+        initials:    'DL',
+        title:       'Astrofísico',
+        institution: 'Instituto de Ciencias Nucleares, UNAM (México)',
+        url:         'https://akanaba.org/diego-lopez-camara',
+      },
+      event: {
+        title:    'Eclipses solares totales y el viaje de Eddington para verificar la relatividad general',
+        date:     '12 de agosto de 2026',
+        dateISO:  '2026-08-12',
+        time:     '12:00–13:00',
+        location: 'Sala Arlanza, Covarrubias',
+        free:     true,
+      },
     },
-    event: {
-      title:       'Conferencia: Eclipse Solar Total 2026',
-      subtitle:    'Ciencia, historia y observación del eclipse del 12 de agosto',
-      date:        '11 de agosto de 2026',          // tarde previa al eclipse
-      dateISO:     '2026-08-11',
-      time:        'Por confirmar',                 // TBD — actualizar cuando se confirme
-      location:    'Por confirmar',                 // TBD — actualizar cuando se confirme
-      language:    'Español',
-      registration: null,                           // URL inscripción — añadir cuando esté disponible
+    {
+      speaker: {
+        name:        'Emilio J. Alfaro Navarro',
+        initials:    'EA',
+        title:       'Astrofísico · Investigador Científico del CSIC (Ad honorem)',
+        institution: 'Instituto de Astrofísica de Andalucía, CSIC',
+        url:         null,
+      },
+      event: {
+        title:    'Un paseo por la Vía Láctea',
+        date:     '13 de agosto de 2026',
+        dateISO:  '2026-08-13',
+        time:     '12:00–13:00',
+        location: 'Sala Arlanza, Covarrubias',
+        free:     true,
+      },
     },
-  },
+  ],
 
   /* ─── MAP ────────────────────────────────────────────────── */
   map: {
@@ -166,9 +182,9 @@ const CONFIG = {
 Object.freeze(CONFIG);
 Object.freeze(CONFIG.site);
 Object.freeze(CONFIG.eclipse);
-Object.freeze(CONFIG.lecture);
-Object.freeze(CONFIG.lecture.speaker);
-Object.freeze(CONFIG.lecture.event);
+Object.freeze(CONFIG.lectures);
+Object.freeze(CONFIG.lectures[0]);
+Object.freeze(CONFIG.lectures[1]);
 Object.freeze(CONFIG.map);
 Object.freeze(CONFIG.weather);
 Object.freeze(CONFIG.webcam);

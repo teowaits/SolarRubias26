@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   initTheme();
   initAccordions();
+  initLectureSlider();
 
   // Eclipse data first — countdown depends on it
   await Eclipse.init();
@@ -77,6 +78,53 @@ function updateToggleIcon(theme) {
   btn.textContent   = theme === 'dark' ? '☀' : '☽';
   btn.setAttribute('aria-label', theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
   btn.setAttribute('title',      theme === 'dark' ? 'Modo claro'           : 'Modo oscuro');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LECTURE SLIDER
+   ══════════════════════════════════════════════════════════════ */
+
+function initLectureSlider() {
+  const track   = document.getElementById('lecture-track');
+  const prevBtn = document.getElementById('slide-prev');
+  const nextBtn = document.getElementById('slide-next');
+  const dots    = document.querySelectorAll('.lecture-slider__dot');
+
+  if (!track || !prevBtn || !nextBtn) return;
+
+  const total = dots.length;
+  let current = 0;
+  let startX  = 0;
+
+  function goTo(idx) {
+    current = Math.max(0, Math.min(total - 1, idx));
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dots.forEach((d, i) => {
+      d.classList.toggle('lecture-slider__dot--active', i === current);
+      d.setAttribute('aria-selected', i === current ? 'true' : 'false');
+    });
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+  dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+
+  // Touch swipe
+  track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend',   e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 48) goTo(diff > 0 ? current + 1 : current - 1);
+  });
+
+  // Keyboard
+  document.getElementById('lecture-slider')?.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  goTo(current - 1);
+    if (e.key === 'ArrowRight') goTo(current + 1);
+  });
+
+  goTo(0);
 }
 
 /* ══════════════════════════════════════════════════════════════

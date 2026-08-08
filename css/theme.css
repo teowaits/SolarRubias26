@@ -1,14 +1,17 @@
 /*
- * theme.css — SolarRubias 2026
+ * theme.css — Eclipse 2026 Covarrubias
  * ─────────────────────────────────────────────────────────────
  * All CSS custom properties live here.
  * Dark theme is the default (defined on :root).
  * Light theme overrides via [data-theme="light"] on <html>.
+ *
+ * FOR CLAUDE DESIGN: Edit this file to change the visual identity.
+ * JS never reads or writes these variables directly.
  * ─────────────────────────────────────────────────────────────
  */
 
 /* ── GOOGLE FONTS ── */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400&family=Space+Mono:wght@400;700&display=swap');
 
 /* ══════════════════════════════════════════════════════════════
    DARK THEME (default)
@@ -29,8 +32,8 @@
   --text-inverted:   #0d1119;   /* text on accent backgrounds */
 
   /* ── Solar accent (corona gold) ── */
-  --accent:          #e0a030;
-  --accent-dim:      #7a5510;
+  --accent:          #e0a030;   /* primary accent — corona */
+  --accent-dim:      #7a5510;   /* dimmed accent */
   --accent-glow:     rgba(224, 160, 48, 0.20);
 
   /* ── Borders ── */
@@ -39,8 +42,8 @@
   --border-strong:   rgba(255, 255, 255, 0.20);
 
   /* ── Semantic status colors ── */
-  --status-danger-bg:    rgba(200, 50, 30, 0.15);
-  --status-danger-text:  #e87060;
+  --status-danger-bg:   rgba(200, 50, 30, 0.15);
+  --status-danger-text: #e87060;
   --status-danger-border: rgba(200, 50, 30, 0.30);
 
   --status-warn-bg:    rgba(200, 130, 30, 0.15);
@@ -56,14 +59,17 @@
   --status-info-border: rgba(50, 100, 200, 0.30);
 
   /* ── Eclipse phase colors ── */
-  --phase-partial:   #5070a0;
-  --phase-totality:  #e0a030;
-  --phase-progress:  #1e3c6e;
+  --phase-partial:   #5070a0;   /* soft blue for partial phase */
+  --phase-totality:  #e0a030;   /* corona gold for totality */
+  --phase-progress:  #1e3c6e;   /* progress bar track */
 
   /* ── Map ── */
-  --map-path-fill:    rgb(224, 160, 48);
+  --map-path-fill:    rgb(224, 160, 48);    /* solid — fillOpacity in Leaflet controls alpha */
   --map-path-stroke:  rgb(224, 140, 20);
   --map-center-stroke: rgb(255, 200, 60);
+
+  /* ── Theme toggle icon ── */
+  --toggle-icon: '☀';           /* show sun = "switch to light" */
 
   /* ── Shadows ── */
   --shadow-card:  0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -71,9 +77,6 @@
 
   /* ── Transitions ── */
   --transition-theme: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-
-  /* ── Corona hero art ── */
-  --corona-streamer-opacity: 1;   /* overall opacity multiplier for hero art */
 
   /* ── Theme indicator (for JS to read via getComputedStyle) ── */
   --theme-name: "dark";
@@ -86,8 +89,8 @@
 [data-theme="light"] {
 
   /* ── Backgrounds ── */
-  --bg-base:         #f4f0e6;
-  --bg-surface:      #fdfaf3;
+  --bg-base:         #f4f0e6;   /* aged parchment */
+  --bg-surface:      #fdfaf3;   /* card surfaces — lighter parchment */
   --bg-elevated:     #fffef9;
   --bg-overlay:      rgba(244, 240, 230, 0.92);
 
@@ -98,7 +101,7 @@
   --text-inverted:   #fdfaf3;
 
   /* ── Solar accent ── */
-  --accent:          #a06e00;
+  --accent:          #a06e00;   /* darker amber for contrast on light bg */
   --accent-dim:      #dccca0;
   --accent-glow:     rgba(160, 110, 0, 0.12);
 
@@ -108,8 +111,8 @@
   --border-strong:   rgba(0, 0, 0, 0.25);
 
   /* ── Semantic status ── */
-  --status-danger-bg:    rgba(180, 40, 20, 0.08);
-  --status-danger-text:  #b02010;
+  --status-danger-bg:   rgba(180, 40, 20, 0.08);
+  --status-danger-text: #b02010;
   --status-danger-border: rgba(180, 40, 20, 0.20);
 
   --status-warn-bg:    rgba(160, 100, 0, 0.10);
@@ -134,6 +137,9 @@
   --map-path-stroke:  rgb(130, 85, 0);
   --map-center-stroke: rgb(120, 75, 0);
 
+  /* ── Theme toggle ── */
+  --toggle-icon: '☽';           /* show moon = "switch to dark" */
+
   /* ── Shadows ── */
   --shadow-card:  0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
   --shadow-glow:  0 0 20px var(--accent-glow);
@@ -141,37 +147,39 @@
   /* ── Transitions ── */
   --transition-theme: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 
-  /* ── Corona hero art ── */
-  --corona-streamer-opacity: 0.6;   /* dimmer on light background */
-
   --theme-name: "light";
 }
 
 
 /* ══════════════════════════════════════════════════════════════
-   TYPOGRAPHY TOKENS  (shared across themes)
+   TYPOGRAPHY TOKENS
+   (same in both themes — override here if needed per theme)
    ══════════════════════════════════════════════════════════════ */
 :root {
+  /* Font families */
   --font-display:  'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --font-mono:     'Space Mono', 'Courier New', monospace;
   --font-body:     'Source Serif 4', Georgia, serif;
   --font-ui:       system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  --text-xs:    0.70rem;
-  --text-sm:    0.80rem;
-  --text-base:  0.9375rem;
-  --text-md:    1.0625rem;
-  --text-lg:    1.25rem;
-  --text-xl:    1.625rem;
-  --text-2xl:   2.25rem;
-  --text-3xl:   3.5rem;
-  --text-4xl:   5rem;
+  /* Font sizes — type scale */
+  --text-xs:    0.70rem;   /* 11.2px — labels, badges */
+  --text-sm:    0.80rem;   /* 12.8px — secondary text */
+  --text-base:  0.9375rem; /* 15px   — body text */
+  --text-md:    1.0625rem; /* 17px   — lead text */
+  --text-lg:    1.25rem;   /* 20px   — section headers */
+  --text-xl:    1.625rem;  /* 26px   — card titles */
+  --text-2xl:   2.25rem;   /* 36px   — page title */
+  --text-3xl:   3.5rem;    /* 56px   — countdown digits (mobile) */
+  --text-4xl:   5rem;      /* 80px   — countdown digits (desktop) */
 
+  /* Line heights */
   --leading-tight:  1.1;
   --leading-snug:   1.3;
   --leading-normal: 1.6;
   --leading-loose:  1.8;
 
+  /* Spacing scale */
   --space-1:   0.25rem;
   --space-2:   0.5rem;
   --space-3:   0.75rem;
@@ -183,17 +191,20 @@
   --space-12:  3rem;
   --space-16:  4rem;
 
+  /* Border radius */
   --radius-sm:   4px;
   --radius-md:   8px;
   --radius-lg:   12px;
   --radius-xl:   16px;
   --radius-full: 9999px;
 
+  /* Z-index layers */
   --z-map:       10;
   --z-overlay:   20;
   --z-sticky:    30;
   --z-toast:     40;
 
+  /* Animation durations */
   --dur-fast:   120ms;
   --dur-base:   250ms;
   --dur-slow:   450ms;
@@ -202,7 +213,7 @@
 
 
 /* ══════════════════════════════════════════════════════════════
-   TOTALITY STATE
+   TOTALITY STATE — applied to <html> during C2–C3
    ══════════════════════════════════════════════════════════════ */
 [data-eclipse-state="totality"] {
   --bg-base:      #000000;
@@ -212,33 +223,32 @@
   --accent-glow:  rgba(245, 192, 64, 0.35);
 }
 
-/* ── Keyframe animations ── */
+/* Corona pulse animation — used by countdown during totality */
 @keyframes corona-pulse {
   0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
   50%       { box-shadow: 0 0 30px 8px var(--accent-glow); }
 }
 
+/* Digit tick animation — fires each second in countdown */
 @keyframes digit-tick {
   0%   { transform: translateY(-4px); opacity: 0.6; }
   30%  { transform: translateY(0);    opacity: 1; }
   100% { transform: translateY(0);    opacity: 1; }
 }
 
+/* Phase progress fill animation */
 @keyframes progress-fill {
   from { width: 0; }
 }
 
+/* Data load fade-in */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(4px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Skeleton shimmer */
 @keyframes shimmer {
   0%   { background-position: -200% 0; }
   100% { background-position:  200% 0; }
-}
-
-@keyframes corona-ray-flicker {
-  0%, 100% { opacity: var(--ray-op, 0.3); }
-  50%       { opacity: calc(var(--ray-op, 0.3) * 0.7); }
 }
